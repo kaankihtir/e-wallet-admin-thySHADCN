@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -93,7 +93,7 @@ const announcementSchema = z.object({
 
 type AnnouncementFormValues = z.infer<typeof announcementSchema>
 
-export default function AnnouncementPage() {
+function AnnouncementContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [activeLanguage, setActiveLanguage] = useState<string>("en")
@@ -607,5 +607,14 @@ export default function AnnouncementPage() {
         </Form>
       )}
     </div>
+  )
+}
+
+// Wrap the component with Suspense
+export default function AnnouncementPage() {
+  return (
+    <Suspense fallback={<div className="p-6">Loading announcement page...</div>}>
+      <AnnouncementContent />
+    </Suspense>
   )
 } 
